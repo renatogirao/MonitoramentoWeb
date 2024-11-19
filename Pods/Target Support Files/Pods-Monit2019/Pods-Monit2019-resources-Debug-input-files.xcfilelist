@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/Pods-Monit2019/Pods-Monit2019-resources.sh
+${PODS_CONFIGURATION_BUILD_DIR}/GoogleMaps/GoogleMapsResources.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/GooglePlaces/GooglePlacesResources.bundle
