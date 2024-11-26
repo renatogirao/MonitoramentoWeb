@@ -18,19 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     let gcmMessageIDKey = "gcm.message_id"
-
-/*
-    override init(){
-        FirebaseApp.configure()
-        
-    }
-  */
     
-    /*
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        GMSServices.provideAPIKey("AIzaSyCqKKTm15Js1XfnxonZuXFIMyPv61H6eAg")
-        //GMSServices.provideAPIKey("AIzaSyCdfOMw9h34d8WYuoIZ2kTYZkmMd3pJgzI")
+//        GMSServices.provideAPIKey("AIzaSyCqKKTm15Js1XfnxonZuXFIMyPv61H6eAg")
+        GMSServices.provideAPIKey("AIzaSyCdfOMw9h34d8WYuoIZ2kTYZkmMd3pJgzI")
         
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
@@ -45,13 +37,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
-        Messaging.messaging().delegate = self
+//        Messaging.messaging().delegate = self
         application.registerForRemoteNotifications()
         
         FirebaseApp.configure()
         return true
     }
-     */
     
 
     func applicationWillResignActive(_ application: UIApplication) {

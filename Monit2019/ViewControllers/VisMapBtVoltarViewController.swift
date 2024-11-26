@@ -41,7 +41,7 @@ class VisMapBtVoltarViewController: UIViewController{
         Device = UserDefaults.standard.integer(forKey: "Device")
         print("icodAcessoRastreador=\(icodAcessoRastreador) Device=\(Device)")
         
-        /* Mock para teste local
+        /*
         let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 6.0)
         mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         view = mapView
