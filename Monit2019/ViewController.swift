@@ -372,7 +372,6 @@ class ViewController: UIViewController {
     }
     
     func AtivarAmpulheta(){
-    
         activityIndicator.startAnimating()
     }
 
