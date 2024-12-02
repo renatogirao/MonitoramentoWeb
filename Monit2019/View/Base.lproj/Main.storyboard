@@ -181,6 +181,11 @@
                                 <state key="normal" title="Visualizar mapa">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath=" layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="btVisualizar:" destination="x6n-0y-f01" eventType="touchUpInside" id="4Dp-Or-ptr"/>
                                 </connections>
@@ -201,6 +206,11 @@
                                 <state key="normal" title="Enviar comandos">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath=" layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="btEnviarComandos:" destination="x6n-0y-f01" eventType="touchUpInside" id="pDd-Rd-S4s"/>
                                 </connections>
@@ -215,6 +225,11 @@
                                 <state key="normal" title="Histórico de comandos">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath=" layer.cornerRadius">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="btHistoricoComandos:" destination="x6n-0y-f01" eventType="touchUpInside" id="sws-47-8hh"/>
                                 </connections>
