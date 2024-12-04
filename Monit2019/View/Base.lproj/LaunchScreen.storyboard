@@ -16,10 +16,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MonitoramentoWeb" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zm8-az-Jqb">
-                                <rect key="frame" x="50.666666666666657" y="411" width="292" height="30"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchIcon sem fundo" translatesAutoresizingMaskIntoConstraints="NO" id="ZuG-55-933">
+                                <rect key="frame" x="77" y="213" width="239" height="210"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="MonitoramentoWeb" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zm8-az-Jqb">
+                                <rect key="frame" x="50" y="456" width="292" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="l0e-MJ-wk9"/>
+                                    <constraint firstAttribute="height" constant="30" id="HYj-sq-Jl4"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-Bold" family="Avenir Next Condensed" pointSize="36"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -27,10 +31,15 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" red="0.19215686274509802" green="0.19215686274509802" blue="0.19215686274509802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.054901960784313725" green="0.41960784313725491" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Zm8-az-Jqb" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="U6d-Kr-YQ7"/>
-                            <constraint firstItem="Zm8-az-Jqb" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="V8l-QQ-Fkv"/>
+                            <constraint firstItem="ZuG-55-933" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="154" id="1f3-jS-eI0"/>
+                            <constraint firstItem="Zm8-az-Jqb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="C7l-Qw-PrH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Zm8-az-Jqb" secondAttribute="bottom" constant="332" id="HRP-24-ahX"/>
+                            <constraint firstItem="ZuG-55-933" firstAttribute="centerX" secondItem="Zm8-az-Jqb" secondAttribute="centerX" id="NV9-hN-TQX"/>
+                            <constraint firstItem="Zm8-az-Jqb" firstAttribute="top" secondItem="ZuG-55-933" secondAttribute="bottom" constant="33" id="WQk-Rv-NVe"/>
+                            <constraint firstItem="ZuG-55-933" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="77" id="gcZ-bG-Ynt"/>
+                            <constraint firstItem="Zm8-az-Jqb" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qft-ST-CMf"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -39,4 +48,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="launchIcon sem fundo" width="1024" height="1024"/>
+    </resources>
 </document>

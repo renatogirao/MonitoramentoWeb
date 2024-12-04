@@ -9,12 +9,13 @@
 import Foundation
 import UIKit
 
-
 class SelOpcViewController:UIViewController{
     @IBAction func btVoltar(_ sender: Any) {
         print("clicou em Voltar")
         dismiss(animated: true, completion: nil)
     }
+    
+    
     @IBOutlet weak var lblRast: UILabel!
     
     var sRastreador = ""
@@ -23,31 +24,29 @@ class SelOpcViewController:UIViewController{
     var icodAcessoRastreador = 0
     var iQTDAcessoDisponivel = 0
     var icodPlano = 0
+    let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
     
     
     
     @IBAction func btHistoricoComandos(_ sender: Any) {
         print("clicou em btHistoricoComandos, icodTel = ", icodTel)
         
-       /*
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        guard let VisMapView = mainStoryboard.instantiateViewController(withIdentifier: "HistoricoComandos") as? HistoricoComandos else {return}
-        
-        //VisMapViewController.sRastreador = arrayRast[indexPath.row]
-        VisMapView.icodTel = icodTel
-        
-        present(VisMapView, animated: true, completion: nil)
+        /*
+         guard let VisMapView = mainStoryboard.instantiateViewController(withIdentifier: "HistoricoComandos") as? HistoricoComandos else {return}
+         
+         //VisMapViewController.sRastreador = arrayRast[indexPath.row]
+         VisMapView.icodTel = icodTel
+         
+         present(VisMapView, animated: true, completion: nil)
          */
         
         UserDefaults.standard.set(icodTel, forKey: "codTel")
         /*
-        if let tabbar = (storyboard?.instantiateViewController(withIdentifier: "HistoricoComandos") ){
-            self.present(tabbar, animated: true, completion: nil)
-        }
-        */
+         if let tabbar = (storyboard?.instantiateViewController(withIdentifier: "HistoricoComandos") ){
+         self.present(tabbar, animated: true, completion: nil)
+         }
+         */
         
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         guard let destination = mainStoryboard.instantiateViewController(withIdentifier: "HistoricoComandos") as? HistoricoComandos else{
             print("deu merda")
             return
@@ -63,7 +62,6 @@ class SelOpcViewController:UIViewController{
         
         UserDefaults.standard.set(icodTel, forKey: "codTel")
         
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         guard let destination = mainStoryboard.instantiateViewController(withIdentifier: "EnviarComandos") as? EnviarComandos else{
             print("deu merda")
             return
@@ -72,10 +70,6 @@ class SelOpcViewController:UIViewController{
         destination.icodTel = icodTel
         
         navigationController?.pushViewController(destination, animated: true)
- 
-
-
-        
     }
     
     @IBAction func btVisualizar(_ sender: Any) {
@@ -115,15 +109,23 @@ class SelOpcViewController:UIViewController{
         if let tabbar = (storyboard?.instantiateViewController(withIdentifier: "tabBar") as? UITabBarController ){
             self.present(tabbar, animated: true, completion: nil)
         }
-        
-
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigationItem()
         lblRast.text = sRastreador
         print("Load SelOpcViewController icodTel=", icodTel)
+        
+    }
+    
+    func configureNavigationItem() {
+        DispatchQueue.main.async {
+            let backItem = UIBarButtonItem()
+            backItem.title = "Voltar"
+            self.navigationItem.backBarButtonItem = backItem
+        }
     }
     
     func ChamarVisualizaUltPos()
@@ -132,9 +134,7 @@ class SelOpcViewController:UIViewController{
         
         UserDefaults.standard.set(icodTel, forKey: "codTel")
         
-        let mainStoryBoard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        
-        guard let Dest = mainStoryBoard.instantiateViewController(withIdentifier: "VisualizaUltPosViewController") as? VisualizaUltPosViewController else{
+        guard let Dest = mainStoryboard.instantiateViewController(withIdentifier: "VisualizaUltPosViewController") as? VisualizaUltPosViewController else{
             print("Couldnt find the view controller")
             return
         }
@@ -142,8 +142,6 @@ class SelOpcViewController:UIViewController{
         Dest.sRastreador = sRastreador
         
         self.navigationController?.pushViewController(Dest, animated: true)
-
-        
     }
     
     func ChamarAcessoRastreador()
@@ -214,7 +212,7 @@ class SelOpcViewController:UIViewController{
                 //self.arrayRast.append("VOLTAR")
                 
                 
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     //self.tableView.reloadData()
                     //print("vai chamar reload")
                     //self.pickerView.reloadAllComponents()
@@ -230,23 +228,19 @@ class SelOpcViewController:UIViewController{
                             self.showFechar(title: "Atingido limite diário de acesso", message: "Aguarde o próximo período (00:00) ou adicione mais acessos.", handlerOK: {action in
                                 print("Clicou em Fechar")
                             })
-
+                            
                         }else{
                             self.ChamarTab()
                         }
                     }
                 }
-                
-                
-                
-                
             }catch let jsonErr{
                 print("Error serializing json:", jsonErr)
             }
             
             
-            }.resume()
+        }.resume()
     }
-
+    
     
 }

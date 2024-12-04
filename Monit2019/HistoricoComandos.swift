@@ -91,138 +91,90 @@ class HistoricoComandos: UIViewController, UITableViewDataSource, UITableViewDel
     
 
     
-    func ChamarBanco()
-    {
+    func ChamarBanco() {
         print("Inicio ChamarBanco, icodTel = ", icodTel)
         let jsonUrlString = "http://177.144.136.91:8095/monitoramentoweb/api/SelTelHistoricoComando"
+
+        // Parâmetros adicionais
+        let parameterDictionary: [String: Any] = [
+            "codTelHistoricoComando": 0,
+            "codTel": icodTel,
+            "codHistoricoComando": 0,
+            "codDevice": 0
+        ]
         
-        //guard let url = URL(string: jsonUrlString) else {return}
+        // Verifica se a URL é válida
+        guard let serviceUrl = URL(string: jsonUrlString) else {
+            print("URL inválida.")
+            return
+        }
         
-        //adicional
-        let parameterDictionary = ["codTelHistoricoComando" : 0, "codTel" : icodTel, "codHistoricoComando" : 0, "codDevice" : 0] as [String : Any]
-        guard let serviceUrl = URL(string: jsonUrlString) else {return}
         var request = URLRequest(url: serviceUrl)
         request.httpMethod = "POST"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
-        guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options:[]) else {return}
-        request.httpBody = httpBody
-        //------------
         
-        URLSession.shared.dataTask(with: request) { (data, response, err) in
-            guard let data = data else {return}
-            print("P4.0")
-            //let dataAsString = String(data: data, encoding: .utf8)
-            //print(dataAsString)
+        // Serializa os parâmetros para o corpo da requisição
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options: []) else {
+            print("Erro ao criar o corpo da requisição.")
+            return
+        }
+        request.httpBody = httpBody
+        
+        // Executa a tarefa de rede
+        URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            guard let self = self else { return }
+            guard let data = data else {
+                print("Erro: dados da resposta são nulos.")
+                return
+            }
             
             do {
+                // Tenta desserializar o JSON
+                guard let parsedData = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                    print("Erro ao converter os dados para o formato esperado.")
+                    return
+                }
                 
+                var contador: Int = 0
                 
-                let parsedData = try JSONSerialization.jsonObject(with: data) as! [String:Any]
-                var i: Int = 0
-                for(_, value) in parsedData{
-                    //if key.contains("Nome"){
-                    //print("P00  \(key) --- \(value)")
-                    //print("P00  \(value)")
-                    if let articleArray:[[String : Any]] = value as? [[String:Any]]{
-                        //print("is array of dicionaties")
-                        
-                        for dict in articleArray{
-                            for(key, value) in dict {
-                                //print("\(i) \(key) = \(value)")
-                                if key.contains("dsc"){
-                                    i=i+1
-                                    print("\(i) \(key) = \(value)")
-                                    self.arrayHistoricoComandos.append(value as! String)
-                                    print("adicionou no array ", value)
+                for (_, value) in parsedData {
+                    if let articleArray = value as? [[String: Any]] {
+                        for dict in articleArray {
+                            for (key, value) in dict {
+                                if key.contains("dsc"), let stringValue = value as? String {
+                                    contador += 1
+                                    print("\(contador) \(key) = \(stringValue)")
+                                    self.arrayHistoricoComandos.append(stringValue)
+                                    print("Adicionado no array: ", stringValue)
+                                } else if key.contains("DtaCriacao"), let dateString = value as? String {
+                                    print("Valor recebido = \(dateString)")
                                     
-                                }else if key.contains("DtaCriacao"){
-                                    
-                                    //var sHorarioTemp = ""
-                                    print("value=\(value)")
-                                    
-                                    var dateString = ""
-                                    dateString = value as! String
-                                    print("dateString=", dateString)
                                     let dateFormatter = DateFormatter()
                                     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
                                     
-                                    let date = dateFormatter.date(from: dateString)
-                                    print("date = ", date ?? "")
-                                    
-                                    let dataNova = DateFormatter()
-                                    dataNova.dateFormat = "dd/MM/yyyy HH:mm"
-                                    let timeStamp = dataNova.string(from: date!)
-                                    print("timeStamp=", timeStamp)
-                                    
-                                    self.arraySub.append(timeStamp)
-                                    
-                                    
-                                    /*
-                                    let formatter = DateFormatter()
-                                    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                                    
-                                    let dsP = DateFormatter()
-                                    //dsP.dateFormat = "dd-MM-yyyy"
-                                    dsP.dateFormat = "HH:mm:ss"
-                                    if let date = formatter.date(from: value as! String){
-                                        print("Horario:", dsP.string(from: date))
-                                        //self.Datas.append(dsP.string(from: date))
-                                        self.sHorarioTemp = dsP.string(from: date)
-                                    }else{
-                                        print("deu merda, valor = ", value)
+                                    if let date = dateFormatter.date(from: dateString) {
+                                        let dataNova = DateFormatter()
+                                        dataNova.dateFormat = "dd/MM/yyyy HH:mm"
+                                        let timeStamp = dataNova.string(from: date)
+                                        print("Timestamp formatado = \(timeStamp)")
+                                        self.arraySub.append(timeStamp)
+                                    } else {
+                                        print("Erro ao converter a data: \(dateString)")
                                     }
-                                    */
-                                    
-                                    /*
-                                    let formatter = DateFormatter()
-                                    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                                    
-                                    let dsP = DateFormatter()
-                                    dsP.dateFormat = "HH:mm:ss"
-                                    if let date = formatter.date(from: value as! String){
-                                        //print("Horario:", dsP.string(from: date))
-                                        //self.Datas.append(dsP.string(from: date))
-                                        //sHorarioValido = "S"
-                                        sHorarioTemp = dsP.string(from: date)
-                                        //self.arraySub.append(dsP.string(from: date))
-                                        self.arraySub.append(sHorarioTemp)
-                                        print("adicionou no array sub ", sHorarioTemp)
-                                    }else{
-                                        print("deu merda, valor = ", value)
-                                    }
-                                    */
-                                    
-                                    //self.arraySub.append(value as! String)
-                                    //print("adicionou no array sub ", value)
-
                                 }
-
-                                
                             }
                         }
-                        
                     }
-                    
                 }
                 
-                
-                
-                //self.arrayHistoricoComandos.append("VOLTAR")
-                
-                DispatchQueue.main.sync {
-                    print("final reloadData")
+                // Atualiza a interface na main thread para evitar bugs e crashs
+                DispatchQueue.main.async {
+                    print("Finalizando e recarregando dados.")
                     self.tableView.reloadData()
                 }
-                
-                
-            }catch let jsonErr{
-                print("Error serializing json:", jsonErr)
+            } catch let jsonError {
+                print("Erro ao serializar o JSON: \(jsonError)")
             }
-            
-            
-            }.resume()
+        }.resume()
     }
-    
-    
-    
 }

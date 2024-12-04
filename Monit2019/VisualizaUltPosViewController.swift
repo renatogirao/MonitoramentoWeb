@@ -103,11 +103,8 @@ class VisualizaUltPosViewController: UIViewController, UITableViewDataSource, UI
         }else{
             cell.backgroundColor = UIColor.white
             cell.textLabel?.textColor = UIColor.black
-            
         }
 
-        
-        
         //configure the cell...
         //cell.textLabel?.text = arrayCoordenada[indexPath.row]
         //print(indexPath.row, indexPath.count)

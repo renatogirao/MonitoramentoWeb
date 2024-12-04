@@ -31,9 +31,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtSenha: UITextField!
     
+    @IBOutlet weak var btLogin: UIButton!
+    var isPasswordVisible = false // Controla a visibilidade da senha
+    
     var activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView()
-    //var sSenha: UITextField;
-    //var sEmail: UITextField;
     
     var sEmail:String = "";
     var sSenha:String = "";
@@ -44,13 +45,23 @@ class ViewController: UIViewController {
     var icodDevice:Int = 0
     var sProcessando = ""
     var sVersao = "208"
-
-
+    
+    
     @IBAction func btLogin(_ sender: UIButton) {
         print("clicou no botao Login, icodDevice=", icodDevice, " Device = " , Device)
         
         preProcessarBotaoLogin()
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configurePasswordToggle()
+        loadUserDefaults()
+        configureActivityIndicator()
+        initializeDeviceIfNeeded()
+    }
+    
     
     func preProcessarBotaoLogin(){
         print("Inicio preProcessarBotaoLogin sDeviceTokenStringJaRegistrado = ", sDeviceTokenStringJaRegistrado, " sDeviceTokenString= ", sDeviceTokenString)
@@ -226,15 +237,15 @@ class ViewController: UIViewController {
             }
         }
         
-        print("fim")
+        print("fim do método ProcessarBotaoLogin")
     }
     
     func RegistrarFCM(){
         print("Inicio RegistrarFCM, Device = ", Device, " DeviceTokenString=", sDeviceTokenString)
         let jsonUrlString = "http://177.144.136.91:8095/monitoramentoweb/api/Device/AtualizaDevice"
         
-     
-       
+        
+        
         let parameterDictionary = ["Tipo" : 1, "codDevice" : 0, "Device": Device, "codDeviceSistema": 0, "RegGCM": "", "codUsuarioGps": 0, "Versao": "", "Ativo": "", "codDevicePlataforma": 0, "FCMToken": sDeviceTokenString] as [String : Any]
         guard let serviceUrl = URL(string: jsonUrlString) else {return}
         var request = URLRequest(url: serviceUrl)
@@ -288,22 +299,34 @@ class ViewController: UIViewController {
                 print("Error serializing json:", jsonErr)
             }
             
-            }.resume()
-        
-        
-        
-        
-        
-        
-        
-
+        }.resume()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    // Configura o botão para alternar visibilidade da senha
+    func configurePasswordToggle() {
+        let toggleButton = UIButton(type: .custom)
+        toggleButton.setImage(UIImage(systemName: "eye"), for: .normal)
+        toggleButton.setImage(UIImage(systemName: "eye.slash"), for: .selected)
+        toggleButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         
+        toggleButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        txtSenha.rightView = toggleButton
+        txtSenha.rightViewMode = .always
+    }
+    
+    @objc func togglePasswordVisibility() {
+        isPasswordVisible.toggle()
+        txtSenha.isSecureTextEntry = !isPasswordVisible
         
+        // Atualiza o estado do botão
+        if let toggleButton = txtSenha.rightView as? UIButton {
+            toggleButton.isSelected = isPasswordVisible
+        }
+    }
+    
+    
+    // Carrega valores armazenados no UserDefaults
+    func loadUserDefaults() {
         sDeviceTokenString = UserDefaults.standard.string(forKey: "DeviceTokenString") ?? ""
         sDeviceTokenStringJaRegistrado = UserDefaults.standard.string(forKey: "DeviceTokenStringJaRegistrado") ?? ""
         sEmail = UserDefaults.standard.string(forKey: "Email") ?? ""
@@ -315,34 +338,34 @@ class ViewController: UIViewController {
         print("LOAD Device = ", Device, " icodDevice = ", icodDevice)
         print("DeviceTokenString=", sDeviceTokenString)
         print("sDeviceTokenStringJaRegistrado=", sDeviceTokenStringJaRegistrado)
-
         
-        //txtEmail.text =  "123121"
         txtEmail.text = sEmail
         txtSenha.text = sSenha
-        
+    }
+    
+    // Configura o ActivityIndicator
+    func configureActivityIndicator() {
         activityIndicator.center = self.view.center
-        activityIndicator.hidesWhenStopped=true
+        activityIndicator.hidesWhenStopped = true
         activityIndicator.style = UIActivityIndicatorView.Style.gray
         self.view.addSubview(activityIndicator)
+    }
+    
+    // Inicializa o dispositivo caso necessário
+    func initializeDeviceIfNeeded() {
+        guard Device == 0 else { return }
         
-        //AtivarAmpulheta()
-        if(Device == 0){
-            print("Device = 0, Load, iniciar tentativa de incluir")
-            let currentDT = Date()
-            let dateFormatter = DateFormatter()
-            dateFormatter.timeStyle = .medium
-            //print("hora = ", dateFormatter.string(from: currentDT))
-            //currentDT.addTimeInterval(60)
-            print("setando hora no btLogin = ", dateFormatter.string(from: currentDT))
-            
-            UserDefaults.standard.set(currentDT, forKey: "HoraInicioProcessamento")
-            
-            //precisa chamar rotina de criacao do device
-            sProcessando = "S"
-            print("Chamando IncDevice sProcessando = 'S'")
-            IncDevice()
-        }
+        print("Device = 0, Load, iniciar tentativa de incluir")
+        let currentDT = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .medium
+        
+        print("setando hora no btLogin = ", dateFormatter.string(from: currentDT))
+        UserDefaults.standard.set(currentDT, forKey: "HoraInicioProcessamento")
+        
+        sProcessando = "S"
+        print("Chamando IncDevice sProcessando = 'S'")
+        IncDevice()
     }
     
     
@@ -356,7 +379,7 @@ class ViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         print("Passou viewdidDisappear")
     }
- 
+    
     
     func ME(userMessage:String)
     {
@@ -373,13 +396,14 @@ class ViewController: UIViewController {
     
     func AtivarAmpulheta(){
         activityIndicator.startAnimating()
+        btLogin.isUserInteractionEnabled = false
     }
-
+    
     func CancelarAmpulheta(){
-        print("Inicio CancelarAmpulheta")
         activityIndicator.stopAnimating()
+        btLogin.isUserInteractionEnabled = true
     }
-
+    
     
     func ChamarBanco4GET(){
         print("Inicio ChamarBanco4GET")
@@ -402,9 +426,9 @@ class ViewController: UIViewController {
             }
             
             
-            }.resume()
+        }.resume()
         print("Fim ChamarBanco4GET")
-
+        
     }
     
     func ChamarBanco3(completionHandler:@escaping ([String: Any]?, Error?)->Void) {
@@ -437,20 +461,20 @@ class ViewController: UIViewController {
                 
                 completionHandler(json, nil)
                 
-
+                
                 
             }catch let jsonErr{
                 print("Error serializing json:", jsonErr)
             }
             
             
-            }.resume()
+        }.resume()
         
         
         print("Fim ChamarBanco3")
     }
-
-
+    
+    
     func ChamarBanco2(){
         print("Inicio ChamarBanco2")
         let jsonUrlString = "https://api.letsbuildthatapp.com/jsondecodable/course"
@@ -466,7 +490,7 @@ class ViewController: UIViewController {
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
                 print(json)
-
+                
             }catch let jsonErr{
                 print("Error serializing json:", jsonErr)
             }
@@ -492,7 +516,7 @@ class ViewController: UIViewController {
         guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options:[]) else {return}
         request.httpBody = httpBody
         //------------
-
+        
         print("P1.0")
         URLSession.shared.dataTask(with: request) { (data, response,error) in
             guard let data = data else {return}
@@ -511,11 +535,11 @@ class ViewController: UIViewController {
             
         }.resume()
         
-
+        
         print("Fim Chamar Banco")
     }
     
-
+    
     func IncDevice()
     {
         print("Inicio IncDevice ")
@@ -569,7 +593,7 @@ class ViewController: UIViewController {
                                     self.sProcessando = ""
                                     print("icodDevice ficou \(self.icodDevice) e sProcessando = ''")
                                     UserDefaults.standard.set(self.icodDevice, forKey: "codDevice")
-
+                                    
                                 }
                                 
                             }
@@ -578,8 +602,6 @@ class ViewController: UIViewController {
                     }
                     
                 }
-                
-                
                 
                 //self.arrayRast.append("VOLTAR")
                 
@@ -591,10 +613,8 @@ class ViewController: UIViewController {
             }catch let jsonErr{
                 print("IncDevice Error serializing json:", jsonErr)
             }
-            
-            
-            }.resume()
+        }.resume()
     }
-
+    
 }
 
