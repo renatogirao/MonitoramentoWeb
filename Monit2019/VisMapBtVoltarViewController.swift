@@ -26,11 +26,8 @@ class VisMapBtVoltarViewController: UIViewController{
     
     //let marker = GMSMarker()
     
-    
     var marker = GMSMarker()
     var mapView: GMSMapView!
-
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +69,11 @@ class VisMapBtVoltarViewController: UIViewController{
          */
         print("Inicializou map no brasil")
 
+    }
+    
+    // Chamar no viewDidLoad quando a função for implementada
+    func solicitarLocalizaçãoProUsuario() {
+        LocationManager.shared.requestLocationAuthorization()
     }
     
     func ChamarUltCoordenada() {
@@ -236,7 +238,7 @@ class VisMapBtVoltarViewController: UIViewController{
         for (index, tabBarItem) in tabBar.enumerated() {
             switch index {
             case 0: // Primeira Tab (Mapa)
-                tabBarItem.image = UIImage(systemName: selectedIndex == index ? "map.fill" : "map")
+                tabBarItem.image = UIImage(systemName: selectedIndex == index ? "map.fill" : "map.fill")
             case 1: // Segunda Tab
                 tabBarItem.image = UIImage(systemName: selectedIndex == index ? "magnifyingglass.circle.fill" : "magnifyingglass.circle")
             default:
@@ -244,8 +246,6 @@ class VisMapBtVoltarViewController: UIViewController{
             }
         }
     }
-
-
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -280,9 +280,6 @@ class VisMapBtVoltarViewController: UIViewController{
             //var long = -46.661563
             
             ChamarConsultaDados()
-            
-
-            
         }
         
     }
