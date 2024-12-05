@@ -27,8 +27,8 @@ class MainTabBarController: UITabBarController {
     
     func configureTabBar() {
         // Configurações gerais do UITabBar
-        tabBar.tintColor = .systemBlue // Cor do texto e ícone da aba selecionada
-        tabBar.unselectedItemTintColor = .darkGray // Cor do texto e ícone das abas não selecionadas
-        tabBar.backgroundColor = .lightGray
+        tabBar.tintColor = UIColor(rgb: 0x0E6BB9) // Cor do texto e ícone da aba selecionada
+        tabBar.unselectedItemTintColor = UIColor(rgb: 0x4A4A4A) // Cor do texto e ícone das abas não selecionadas
+        tabBar.backgroundColor = UIColor(rgb: 0xF5F5F5)
     }
 }

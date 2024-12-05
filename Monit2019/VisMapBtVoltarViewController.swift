@@ -74,210 +74,148 @@ class VisMapBtVoltarViewController: UIViewController{
 
     }
     
-    func ChamarUltCoordenada()
-    {
-        print("Inicio ChamarUltCoordenada VisMapBtVoltarViewController,icodTel =\(icodTel) Device=\(Device)")
+    func ChamarUltCoordenada() {
+        print("Inicio ChamarUltCoordenada VisMapBtVoltarViewController, icodTel = \(icodTel), Device = \(Device)")
+        
+        // Configurações iniciais
         sGps = UserDefaults.standard.string(forKey: "Gps") ?? ""
-        print("sGps (ChamarUltCoordenada)=\(sGps)")
+        print("sGps (ChamarUltCoordenada) = \(sGps)")
+        
+        // Limpando arrays
         ArrayLat.removeAll()
         ArrayLong.removeAll()
         ArrayHorarioCoordenadas.removeAll()
         
-        print("ArrayLat=\(ArrayLat.count)")
-        print("ArrayLong=\(ArrayLong.count)")
-        print("ArrayHorarioCoordenadas=\(ArrayHorarioCoordenadas.count)")
+        print("ArrayLat = \(ArrayLat.count), ArrayLong = \(ArrayLong.count), ArrayHorarioCoordenadas = \(ArrayHorarioCoordenadas.count)")
         
+        // URL do serviço
         let jsonUrlString = "http://177.144.136.91:8095/monitoramentoweb/api/SelDataTel"
-        var sCoordValida = ""
-        var sHorarioValido = ""
-        var sLatTemp = ""
-        var sLongTemp = ""
-        var sHorarioTemp = ""
+        guard let serviceUrl = URL(string: jsonUrlString) else { return }
         
-        //guard let url = URL(string: jsonUrlString) else {return}
+        // Configuração dos parâmetros
+        let parameterDictionary: [String: Any] = [
+            "codTel": icodTel,
+            "Filtro": 4,
+            "DtaInicio": "",
+            "DtaFim": "",
+            "DscIP": "",
+            "Device": Device,
+            "codAcessoRastreador": icodAcessoRastreador,
+            "TipoAcesso": "3",
+            "codTipoDispositivo": "0"
+        ]
         
-        //adicional
-        let parameterDictionary = ["codTel" : icodTel, "Filtro" : 4, "DtaInicio": "", "DtaFim" : "", "DscIP": "", "Device": Device, "codAcessoRastreador": icodAcessoRastreador, "TipoAcesso": "3", "codTipoDispositivo": "0"] as [String : Any]
-        guard let serviceUrl = URL(string: jsonUrlString) else {return}
+        // Configurando a requisição
         var request = URLRequest(url: serviceUrl)
         request.httpMethod = "POST"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
-        guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options:[]) else {return}
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: parameterDictionary, options: []) else { return }
         request.httpBody = httpBody
-        //------------
         
-        URLSession.shared.dataTask(with: request) { (data, response, err) in
-            guard let data = data else {return}
-            print("P5.1 ChamarUltCoordenada VisMapBtVoltarViewController")
-            //let dataAsString = String(data: data, encoding: .utf8)
-            //print(dataAsString)
+        // Iniciando a tarefa de rede
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else { return }
+            print("Recebeu dados ChamarUltCoordenada VisMapBtVoltarViewController")
             
             do {
+                // Parse do JSON
+                let parsedData = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+                var coordenadas: [(lat: String, long: String, horario: String)] = []
                 
-                
-                let parsedData = try JSONSerialization.jsonObject(with: data) as! [String:Any]
-                var i: Int = 0
-                //print(parsedData)
-                for(_, value) in parsedData{
-                    //if key.contains("Nome"){
-                    //print("P00  \(key) --- \(value)")
-                    //print("P00 \(value)")
-                    
-                    if let articleArray:[[String : Any]] = value as? [[String:Any]]{
-                        print("is array of dicionaties 5.1")
-                        //print(articleArray)
+                for (_, value) in parsedData {
+                    if let articleArray = value as? [[String: Any]] {
+                        print("Processando array de dicionários")
                         
-                        for dict in articleArray{
-                            sCoordValida = ""
-                            sHorarioValido = ""
-                            for(key, value) in dict {
-                                print("P00.1  key=\(key) value=\(value) sCoordValida=\(sCoordValida) sHorarioValido=\(sHorarioValido) ")
-                                //print(2)
-                                if key=="Data"{
-                                    
-                                    i=i+1
-                                    //print("\(i) \(key) = \(value)")
-                                    //self.dados.append(value as! String)
-                                    
-                                    
-                                    let formatter = DateFormatter()
-                                    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                                    
-                                    let dsP = DateFormatter()
-                                    //dsP.dateFormat = "dd-MM-yyyy"
-                                    dsP.dateFormat = "HH:mm:ss"
-                                    if let date = formatter.date(from: value as! String){
-                                        print("Horario:", dsP.string(from: date))
-                                        //self.Datas.append(dsP.string(from: date))
-                                        sHorarioValido = "S"
-                                        sHorarioTemp = dsP.string(from: date)
-                                        
-                                        print("iniciar pegar data 5.1")
-                                        dsP.dateFormat = "dd/MM/yyyy"
-                                        if let date = formatter.date(from: value as! String){
-                                            print("data = ", dsP.string(from: date))
-                                            self.sDataPesquisada = dsP.string(from: date)
-                                            print("sDataPesquisada=\(self.sDataPesquisada)")
-                                        }
-                                        
-                                    }else{
-                                        print("deu merda 5.1, valor = ", value)
-                                    }
-                                    
-                                    
-                                    
-                                    //self.arrayRast.append(value as! String)
-                                }else if key=="lat"{
-                                    //self.Datascod.append(value as! Int)
-                                    //print("Lat:  \(value)")
-                                    sLatTemp = value as! String
-                                }else if key=="long"{
-                                    //self.Datascod.append(value as! Int)
-                                    //print("Long:  \(value)")
-                                    sLongTemp = value as! String
-                                    sCoordValida = "S"
-                                }
-                                
-                                if (sHorarioValido=="S" && sCoordValida=="S"){
-                                    print("adicionado sLatTemp = \(sLatTemp) sLongTemp=\(sLongTemp) sHorarioTemp=\(sHorarioTemp)")
-                                    self.ArrayLat.append(sLatTemp)
-                                    self.ArrayLong.append(sLongTemp)
-                                    self.ArrayHorarioCoordenadas.append(sHorarioTemp)
-                                }
+                        for dict in articleArray {
+                            guard let horario = self.extractDate(from: dict["Data"] as? String),
+                                  let lat = dict["lat"] as? String, lat.count > 5,
+                                  let long = dict["long"] as? String, long.count > 5 else {
+                                continue
                             }
+                            
+                            coordenadas.append((lat: lat, long: long, horario: horario))
                         }
-                        
                     }
-                    
                 }
                 
+                // Atualização de arrays principais
+                self.ArrayLat = coordenadas.map { $0.lat }
+                self.ArrayLong = coordenadas.map { $0.long }
+                self.ArrayHorarioCoordenadas = coordenadas.map { $0.horario }
                 
-                
-                //self.arrayRast.append("VOLTAR")
-                
-                
+                // Atualização na thread principal
                 DispatchQueue.main.sync {
-                    //self.tableView.reloadData()
-                    //print("vai chamar reload")
-                    //self.pickerView.reloadAllComponents()
-                    print("Fim de tudo ChamarUltCoordenada")
-                    print("ArrayLat.count=\(self.ArrayLat.count)")
-                    print("ArrayHorarioCoordenadas.count=\(self.ArrayHorarioCoordenadas.count)")
-                    
-                    var sPosicionou = ""
-                    
-                    if(self.ArrayLat.count > 0){
-                        print("uma ou mais coordenadas 5.1. Count = ",self.ArrayLat.count)
-                        
-                        let path = GMSMutablePath()
-                        for i in 0..<self.ArrayLat.count {
-                            //print(self.ArrayLat[i].count)
-                            if (self.ArrayLat[i].count > 5 && self.ArrayLong[i].count > 5){
-                                
-                                if(sPosicionou == ""){
-                                    sPosicionou = "S"
-                                    //for i2 in stride(from: self.ArrayLat.count-1, to: 0, by: -1){
-                                    //if (self.ArrayLat[i2].count > 5 && self.ArrayLong[i2].count > 5){
-                                    print("5.1 posicionou em ", self.ArrayLat[i], self.ArrayLong[i])
-                                    let camera = GMSCameraPosition.camera(withLatitude: Double(self.ArrayLat[i]) ?? 0, longitude: Double(self.ArrayLong[i]) ?? 0, zoom: 16.0)
-                                    self.mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-                                    self.view = self.mapView
-                                    //break
-                                    //}
-                                    //}
-                                }
-                                
-                                let marker = GMSMarker()
-                                marker.position = CLLocationCoordinate2D(latitude: Double(self.ArrayLat[i]) ?? 0, longitude: Double(self.ArrayLong[i]) ?? 0)
-                                
-                                print("title=", self.sGps, " ", self.sDataPesquisada)
-                                print("snippet=", self.ArrayHorarioCoordenadas[i])
-                                
-                                marker.title = "\(self.sGps) \(self.sDataPesquisada)"
-                                marker.snippet = self.ArrayHorarioCoordenadas[i]
-                                marker.map = self.mapView
-                                if(i==0){
-                                    marker.icon = UIImage(named: "flagcheP_2")
-                                    //termino
-                                    print("flag termino")
-                                }else if(i==(self.ArrayLat.count-1)){
-                                    marker.icon = UIImage(named: "flagVerdeLimpaP_2")
-                                    //inicio
-                                    print("flag Inicio")
-                                }
-                                path.add(CLLocationCoordinate2D(latitude: Double(self.ArrayLat[i]) ?? 0, longitude: Double(self.ArrayLong[i]) ?? 0))
-                                
-                                //print("adicionou",self.ArrayLat[i], self.ArrayLong[i])
-                                //}
-                                
-                                
-                            }else{
-                                print("deu merda 5.1, lat=\(self.ArrayLat[i]) long=\(self.ArrayLong[i])")
-                            }
-                            
-                            
-                        }
-                        
-                        
-                        let polyline = GMSPolyline(path: path)
-                        polyline.map = self.mapView
-                        
-                        
-                        
-                    }else{
-                        self.ME(userMessage: "Não foi encontrado nenhum registro com o filtro selecionado")
-                    }
+                    self.processarCoordenadas()
                 }
-                
-                
-                
-                
-            }catch let jsonErr{
-                print("Error serializing json:", jsonErr)
+            } catch let jsonErr {
+                print("Erro ao processar JSON: \(jsonErr)")
+            }
+        }.resume()
+    }
+
+    // Função auxiliar para extrair a data formatada
+    private func extractDate(from string: String?) -> String? {
+        guard let value = string else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateFormat = "HH:mm:ss"
+        
+        if let date = formatter.date(from: value) {
+            return displayFormatter.string(from: date)
+        }
+        return nil
+    }
+
+    // Função para processar e exibir as coordenadas
+    private func processarCoordenadas() {
+        print("Fim ChamarUltCoordenada, ArrayLat.count = \(ArrayLat.count), ArrayHorarioCoordenadas.count = \(ArrayHorarioCoordenadas.count)")
+        
+        guard !ArrayLat.isEmpty else {
+            ME(userMessage: "Não foi encontrado nenhum registro com o filtro selecionado")
+            return
+        }
+        
+        var sPosicionou = false
+        let path = GMSMutablePath()
+        
+        for (index, lat) in ArrayLat.enumerated() {
+            guard let latitude = Double(lat),
+                  let longitude = Double(ArrayLong[index]) else {
+                print("Erro: Coordenadas inválidas")
+                continue
             }
             
+            // Configurando o mapa na primeira coordenada válida
+            if !sPosicionou {
+                sPosicionou = true
+                let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 16.0)
+                self.mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+                self.view = self.mapView
+            }
             
-            }.resume()
+            // Criando marcador
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            marker.title = "\(sGps) \(sDataPesquisada)"
+            marker.snippet = ArrayHorarioCoordenadas[index]
+            
+            // Configuração de ícones para o primeiro e último ponto
+            if index == 0 {
+                marker.icon = UIImage(named: "flagcheP_2") // Flag inicial
+            } else if index == ArrayLat.count - 1 {
+                marker.icon = UIImage(named: "flagVerdeLimpaP_2") // Flag final
+            }
+            marker.map = self.mapView
+            
+            // Adicionando ao caminho
+            path.add(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+        }
+        
+        // Adicionando o caminho ao mapa
+        let polyline = GMSPolyline(path: path)
+        polyline.map = self.mapView
     }
 
     
@@ -287,8 +225,37 @@ class VisMapBtVoltarViewController: UIViewController{
         dismiss(animated: true, completion: nil)
     }
     
+    func configureIconTabBar() {
+        // Certifique-se de que há uma Tab Bar Controller associada
+        guard let tabBar = self.tabBarController?.tabBar.items else { return }
+        
+        // Índice atual da Tab Bar
+        let selectedIndex = self.tabBarController?.selectedIndex ?? 0
+        
+        // Atualize os ícones com base no índice
+        for (index, tabBarItem) in tabBar.enumerated() {
+            switch index {
+            case 0: // Primeira Tab (Mapa)
+                tabBarItem.image = UIImage(systemName: selectedIndex == index ? "map.fill" : "map")
+            case 1: // Segunda Tab
+                tabBarItem.image = UIImage(systemName: selectedIndex == index ? "magnifyingglass.circle.fill" : "magnifyingglass.circle")
+            default:
+                break // Nenhuma alteração para outros índices
+            }
+        }
+    }
+
+
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        configureIconTabBar()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureIconTabBar()
+                
         print("viewwillappear VisMapBtVoltarViewController")
         
         sVisMapFiltro = UserDefaults.standard.string(forKey: "VisMapFiltro") ?? ""

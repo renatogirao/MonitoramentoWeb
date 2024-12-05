@@ -26,6 +26,7 @@
 		0FBAF1E221D93B7400BC3BF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FBAF1E021D93B7400BC3BF1 /* LaunchScreen.storyboard */; };
 		0FDFFBB121E94657005BFF1D /* VisMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDFFBB021E94657005BFF1D /* VisMapViewController.swift */; };
 		571D29BF2CE686560013437C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 571D29BE2CE686560013437C /* Assets.xcassets */; };
+		57C2B2272D00D63000B42E41 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2B2262D00D63000B42E41 /* UIColor+Hex.swift */; };
 		A9B965A9B73C55D58F7E15EA /* Pods_Monit2019.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 838567A9FDACE9785DB261AC /* Pods_Monit2019.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		13C1B5129083357F571E96F4 /* Pods-Monit2019.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Monit2019.release.xcconfig"; path = "Target Support Files/Pods-Monit2019/Pods-Monit2019.release.xcconfig"; sourceTree = "<group>"; };
 		44A81F2ED4B50C7A39BEB0E8 /* Pods-Monit2019.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Monit2019.debug.xcconfig"; path = "Target Support Files/Pods-Monit2019/Pods-Monit2019.debug.xcconfig"; sourceTree = "<group>"; };
 		571D29BE2CE686560013437C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		57C2B2262D00D63000B42E41 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		838567A9FDACE9785DB261AC /* Pods_Monit2019.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Monit2019.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -91,6 +93,7 @@
 		0FBAF1D621D93B7100BC3BF1 /* Monit2019 */ = {
 			isa = PBXGroup;
 			children = (
+				57ABD5262D020676006E0E7C /* New Group */,
 				5793DEE12CE7C10100A2C688 /* View */,
 				571D29BE2CE686560013437C /* Assets.xcassets */,
 				0F429430221F413700AA7CE8 /* GoogleService-Info.plist */,
@@ -110,6 +113,7 @@
 				0F1DF37F22E4EEBE003A9004 /* TableViewCellUltPos.swift */,
 				0F3F11CC21E7EE5E00EE7901 /* SelOpcViewController.swift */,
 				0F6BF97921E0F2C40014F16F /* SelRast.swift */,
+				57C2B2262D00D63000B42E41 /* UIColor+Hex.swift */,
 				0F38BFB922E2686200B584F5 /* VisualizaUltPosViewController.swift */,
 			);
 			path = Monit2019;
@@ -122,6 +126,13 @@
 				0FBAF1DB21D93B7100BC3BF1 /* Main.storyboard */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		57ABD5262D020676006E0E7C /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		6CE02470E7E0929F0576C5E0 /* Frameworks */ = {
@@ -296,6 +307,7 @@
 				0F38BFBA22E2686200B584F5 /* VisualizaUltPosViewController.swift in Sources */,
 				0FA159DA220337FD00F69056 /* HistoricoComandos.swift in Sources */,
 				0F96688221ED1E5A00B172DF /* MainTabBarController.swift in Sources */,
+				57C2B2272D00D63000B42E41 /* UIColor+Hex.swift in Sources */,
 				0F2D9FA6220CBED600D2B985 /* Extension+UIViewController.swift in Sources */,
 				0F3F11CD21E7EE5E00EE7901 /* SelOpcViewController.swift in Sources */,
 				0F96688021ED1A8C00B172DF /* VisMapBtVoltarViewController.swift in Sources */,

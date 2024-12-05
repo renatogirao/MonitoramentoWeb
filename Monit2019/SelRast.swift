@@ -13,8 +13,6 @@ struct Rastreadores: Decodable{
     let Nome: String
 }
 
-
-
 class SelRastController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     @IBOutlet weak var tableView: UITableView!
   
@@ -35,7 +33,7 @@ class SelRastController: UIViewController, UITableViewDataSource, UITableViewDel
     var arraycodPlano = [] as [Int]
     //var arrray
     
-    var icodUsuarioGps:Int = 0;
+    var icodUsuarioGps: Int = 0
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //return the number os rows in the section
@@ -45,8 +43,6 @@ class SelRastController: UIViewController, UITableViewDataSource, UITableViewDel
         }
         return arrayRast.count
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("clicou em ", indexPath.row)
@@ -102,26 +98,11 @@ class SelRastController: UIViewController, UITableViewDataSource, UITableViewDel
             Dest.icodPlano = arraycodPlano[indexPath.row]
             
             print("setou icodPlano = \(Dest.icodPlano)")
-
-
-            /*
-            let backItem = UIBarButtonItem()
-            backItem.title = "Voltar"
-            self.navigationItem.backBarButtonItem = backItem
- */
-            
+        
             self.navigationController?.pushViewController(Dest, animated: true)
-
-            
-            
-            
             
         }
-        
-        
     }
-    
-    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(indexPath.row == 0){
@@ -129,7 +110,6 @@ class SelRastController: UIViewController, UITableViewDataSource, UITableViewDel
         }else{
             return 70
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -140,10 +120,11 @@ class SelRastController: UIViewController, UITableViewDataSource, UITableViewDel
         cell.textLabel?.text = arrayRast[indexPath.row]
         //print(indexPath.row, indexPath.count)
         print("section = \(indexPath.section), row  = \(indexPath.row) adicionado : ", arrayRast[indexPath.row], " cod_plano=", arraycodPlano[indexPath.row])
-        if(arrayRast[indexPath.row].contains("Selecione rastreador")){
-            cell.backgroundColor = UIColor.blue
+        if(arrayRast[indexPath.row].contains("Selecione o rastreador")){
+            cell.backgroundColor = UIColor(rgb: 0x0E6BB9)
             cell.textLabel?.textColor = UIColor.white
             cell.textLabel?.textAlignment = .center
+            cell.textLabel?.isUserInteractionEnabled = false
         }else{
             cell.backgroundColor = UIColor.white
             cell.textLabel?.textColor = UIColor.black
@@ -195,7 +176,7 @@ class SelRastController: UIViewController, UITableViewDataSource, UITableViewDel
     func ChamarBanco()
     {
         
-        self.arrayRast.append("Selecione rastreador")
+        self.arrayRast.append("Selecione o rastreador")
         self.arraycodPlano.append(0)
         
         print("Inicio ChamarBanco, codUsuarioGps = ", icodUsuarioGps)
